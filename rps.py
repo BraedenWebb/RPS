@@ -1,4 +1,5 @@
 # File created by: Braeden Webb
+# Edit for github
 
 # import libraries
 from time import sleep
@@ -18,8 +19,8 @@ game_folder = os.path.dirname(__file__)
 print(game_folder)
 
 # game settings
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 300
+HEIGHT = 300
 FPS = 30
 
 # define colors (RGB) through tuples and integers
@@ -46,19 +47,32 @@ clock = pg.time.Clock()
 rock_image = pg.image.load(os.path.join(game_folder, 'rock.jpg')).convert()
 paper_image = pg.image.load(os.path.join(game_folder, 'paper.jpg')).convert()
 scissors_image = pg.image.load(os.path.join(game_folder, 'scissors.jpg')).convert()
+# win/lose/tie images
 win_image = pg.image.load(os.path.join(game_folder, 'win.png')).convert()
 lose_image = pg.image.load(os.path.join(game_folder, 'lose.png')).convert()
+tie_image = pg.image.load(os.path.join(game_folder, 'tie.png')).convert()
 # user images
-
+user_rock_image = pg.image.load(os.path.join(game_folder, 'user_rock.png')).convert()
+user_paper_image = pg.image.load(os.path.join(game_folder, 'user_paper.png')).convert()
+user_scissors_image = pg.image.load(os.path.join(game_folder, 'user_scissors.png')).convert()
 # cpu images
-
+cpu_rock_image = pg.image.load(os.path.join(game_folder, 'cpu_rock.png')).convert()
+cpu_paper_image = pg.image.load(os.path.join(game_folder, 'cpu_paper.png')).convert()
+cpu_scissors_image = pg.image.load(os.path.join(game_folder, 'cpu_scissors.png')).convert()
 
 # Set Image Transparency
 rock_image.set_colorkey(BLACK)
 paper_image.set_colorkey(BLACK)
 scissors_image.set_colorkey(BLACK)
-win_image.set_colorkey(WHITE)
-lose_image.set_colorkey(WHITE)
+win_image.set_colorkey(BLACK)
+lose_image.set_colorkey(BLACK)
+tie_image.set_colorkey(BLACK)
+user_rock_image.set_colorkey(BLACK)
+user_paper_image.set_colorkey(BLACK)
+user_scissors_image.set_colorkey(BLACK)
+cpu_rock_image.set_colorkey(BLACK)
+cpu_paper_image.set_colorkey(BLACK)
+cpu_scissors_image.set_colorkey(BLACK)
 
 # Does not store pixels but instead where they are and how many they are in dimensions
 # Allows for those values to changed and adjusted
@@ -67,6 +81,13 @@ paper_image_rect = paper_image.get_rect()
 scissors_image_rect = scissors_image.get_rect()
 win_image_rect = win_image.get_rect()
 lose_image_rect = lose_image.get_rect()
+tie_image_rect = lose_image.get_rect()
+user_rock_image_rect = rock_image.get_rect()
+user_paper_image_rect = paper_image.get_rect()
+user_scissors_image_rect = scissors_image.get_rect()
+cpu_rock_image_rect = rock_image.get_rect()
+cpu_paper_image_rect = paper_image.get_rect()
+cpu_scissors_image_rect = scissors_image.get_rect()
 
 # Sets image coordinates
 rock_image_rect.x = 0
@@ -75,6 +96,26 @@ paper_image_rect.x = 100
 paper_image_rect.y = 50
 scissors_image_rect.x = 200
 scissors_image_rect.y = 50
+user_rock_image_rect.x = 0
+user_rock_image_rect.y = 50
+user_paper_image_rect.x = 100
+user_paper_image_rect.y = 50
+user_scissors_image_rect.x = 200
+user_scissors_image_rect.y = 50
+cpu_rock_image_rect.x = 0
+cpu_rock_image_rect.y = 150
+cpu_paper_image_rect.x = 100
+cpu_paper_image_rect.y = 150
+cpu_scissors_image_rect.x = 200
+cpu_scissors_image_rect.y = 150
+# win/lose/tie
+win_image_rect.x = 50
+win_image_rect.y = 125
+lose_image_rect.x = 50
+lose_image_rect.y = 125
+tie_image_rect.x = 50
+tie_image_rect.y = 125
+
 
 # Sets variable, running, to True
 running = True
@@ -160,26 +201,29 @@ while running:
 
     if player_choice == "rock":
         screen.fill(BLACK)
-        screen.blit(rock_image, rock_image_rect)
-
+        screen.blit(user_rock_image, user_rock_image_rect)
+        
     if player_choice == "paper":
         screen.fill(BLACK)
-        screen.blit(paper_image, paper_image_rect)
+        screen.blit(user_paper_image, user_paper_image_rect)
 
     if player_choice == "scissors":
         screen.fill(BLACK)
-        screen.blit(scissors_image, scissors_image_rect)
+        screen.blit(user_scissors_image, user_scissors_image_rect)
 
     # draw computer choice
 
     if cpu_choice == "rock":
-        screen.blit(rock_image, rock_image_rect)
+        screen.blit(cpu_rock_image, cpu_rock_image_rect)
+        break
 
     if cpu_choice == "paper":
-        screen.blit(paper_image, paper_image_rect)
+        screen.blit(cpu_paper_image, cpu_paper_image_rect)
+        break
 
     if cpu_choice == "scissors":
-        screen.blit(scissors_image, scissors_image_rect)
+        screen.blit(cpu_scissors_image, cpu_scissors_image_rect)
+        break
 
     pg.display.flip()
 
@@ -187,29 +231,22 @@ while running:
     
     # Tie
     if player_choice == cpu_choice:
-        print("Tie")
+        screen.blit(tie_image, tie_image_rect)
     
     # Win
     elif player_choice == "rock" and cpu_choice == "scissors":
-        print("You win")
         screen.blit(win_image, win_image_rect)
     elif player_choice == "paper" and cpu_choice == "rock":
-        print("You win")
         screen.blit(win_image, win_image_rect)
-
     elif player_choice == "scissors" and cpu_choice == "paper":
-        print("You win")
         screen.blit(win_image, win_image_rect)
 
     # Lose
     elif player_choice == "scissors" and cpu_choice == "rock":
-        print("You lose")
         screen.blit(lose_image, lose_image_rect)
     elif player_choice == "rock" and cpu_choice == "paper":
-        print("You lose")
         screen.blit(lose_image, lose_image_rect)
     elif player_choice == "paper" and cpu_choice == "scissors":
-        print("You lose")
         screen.blit(lose_image, lose_image_rect)
     
 
