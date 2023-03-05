@@ -59,20 +59,22 @@ user_scissors_image = pg.image.load(os.path.join(game_folder, 'user_scissors.png
 cpu_rock_image = pg.image.load(os.path.join(game_folder, 'cpu_rock.png')).convert()
 cpu_paper_image = pg.image.load(os.path.join(game_folder, 'cpu_paper.png')).convert()
 cpu_scissors_image = pg.image.load(os.path.join(game_folder, 'cpu_scissors.png')).convert()
+# exit images
+exit_image = pg.image.load(os.path.join(game_folder, 'exit.png')).convert()
 
 # Set Image Transparency
-rock_image.set_colorkey(BLACK)
-paper_image.set_colorkey(BLACK)
-scissors_image.set_colorkey(BLACK)
-win_image.set_colorkey(BLACK)
-lose_image.set_colorkey(BLACK)
-tie_image.set_colorkey(BLACK)
-user_rock_image.set_colorkey(BLACK)
-user_paper_image.set_colorkey(BLACK)
-user_scissors_image.set_colorkey(BLACK)
-cpu_rock_image.set_colorkey(BLACK)
-cpu_paper_image.set_colorkey(BLACK)
-cpu_scissors_image.set_colorkey(BLACK)
+# rock_image.set_colorkey(BLACK)
+# paper_image.set_colorkey(BLACK)
+# scissors_image.set_colorkey(BLACK)
+# win_image.set_colorkey(BLACK)
+# lose_image.set_colorkey(BLACK)
+# tie_image.set_colorkey(BLACK)
+# user_rock_image.set_colorkey(BLACK)
+# user_paper_image.set_colorkey(BLACK)
+# user_scissors_image.set_colorkey(BLACK)
+# cpu_rock_image.set_colorkey(BLACK)
+# cpu_paper_image.set_colorkey(BLACK)
+# cpu_scissors_image.set_colorkey(BLACK)
 
 # Does not store pixels but instead where they are and how many they are in dimensions
 # Allows for those values to changed and adjusted
@@ -88,8 +90,10 @@ user_scissors_image_rect = scissors_image.get_rect()
 cpu_rock_image_rect = rock_image.get_rect()
 cpu_paper_image_rect = paper_image.get_rect()
 cpu_scissors_image_rect = scissors_image.get_rect()
+exit_image_rect = exit_image.get_rect()
 
 # Sets image coordinates
+# rps
 rock_image_rect.x = 0
 rock_image_rect.y = 50
 paper_image_rect.x = 100
@@ -110,11 +114,14 @@ cpu_scissors_image_rect.x = 200
 cpu_scissors_image_rect.y = 150
 # win/lose/tie
 win_image_rect.x = 50
-win_image_rect.y = 125
+win_image_rect.y = 10
 lose_image_rect.x = 50
-lose_image_rect.y = 125
+lose_image_rect.y = 10
 tie_image_rect.x = 50
-tie_image_rect.y = 125
+tie_image_rect.y = 10
+# exit
+exit_image_rect.x = 235
+exit_image_rect.y = 275
 
 
 # Sets variable, running, to True
@@ -175,10 +182,13 @@ while running:
                 print("user clicked on scissors")
                 player_choice = "scissors"
                 cpu_choice = cpu_randchoice()
+            # exit check
+            elif exit_image_rect.collidepoint(mouse_coords):
+                print("user exited game")
+                running = False
             # if nothing is chosen
             else:
                 print("user clicked on nothing")
-                cpu_choice = cpu_randchoice()
             # returns true or false 
             # print(rock_image_rect.collidepoint(mouse_coords))
             # print(paper_image_rect.collidepoint(mouse_coords))
@@ -196,62 +206,71 @@ while running:
     screen.blit(rock_image, rock_image_rect)
     screen.blit(paper_image, paper_image_rect)
     screen.blit(scissors_image, scissors_image_rect)
+    screen.blit(exit_image, exit_image_rect)
 
     # draw user choice
 
     if player_choice == "rock":
-        screen.fill(BLACK)
+        # screen.fill(BLACK)
         screen.blit(user_rock_image, user_rock_image_rect)
         
     if player_choice == "paper":
-        screen.fill(BLACK)
+        # screen.fill(BLACK)
         screen.blit(user_paper_image, user_paper_image_rect)
 
     if player_choice == "scissors":
-        screen.fill(BLACK)
+        # screen.fill(BLACK)
         screen.blit(user_scissors_image, user_scissors_image_rect)
 
     # draw computer choice
 
     if cpu_choice == "rock":
         screen.blit(cpu_rock_image, cpu_rock_image_rect)
-        break
+
 
     if cpu_choice == "paper":
         screen.blit(cpu_paper_image, cpu_paper_image_rect)
-        break
+        
 
     if cpu_choice == "scissors":
         screen.blit(cpu_scissors_image, cpu_scissors_image_rect)
-        break
+        
+    # Comparison
+    def compare():
+        # Tie
+        if player_choice == cpu_choice:
+            # print("tie")
+            screen.blit(tie_image, tie_image_rect)
+
+        # Win
+        elif player_choice == "rock" and cpu_choice == "scissors":
+            # print("win")
+            screen.blit(win_image, win_image_rect)
+        elif player_choice == "paper" and cpu_choice == "rock":
+            # print("win")
+            screen.blit(win_image, win_image_rect)
+        elif player_choice == "scissors" and cpu_choice == "paper":
+            # print("win")
+            screen.blit(win_image, win_image_rect)
+
+        # Lose
+        elif player_choice == "scissors" and cpu_choice == "rock":
+            # print("lose")
+            screen.blit(lose_image, lose_image_rect)
+        elif player_choice == "rock" and cpu_choice == "paper":
+            # print("lose")
+            screen.blit(lose_image, lose_image_rect)
+        elif player_choice == "paper" and cpu_choice == "scissors":
+            # print("lose")
+            screen.blit(lose_image, lose_image_rect)
+
+
+        # If anything but rock, paper, or scissors is chosen by user
+        # else:
+        #     print("error")
+        
+    compare()
 
     pg.display.flip()
 
-    # Comparison
-    
-    # Tie
-    if player_choice == cpu_choice:
-        screen.blit(tie_image, tie_image_rect)
-    
-    # Win
-    elif player_choice == "rock" and cpu_choice == "scissors":
-        screen.blit(win_image, win_image_rect)
-    elif player_choice == "paper" and cpu_choice == "rock":
-        screen.blit(win_image, win_image_rect)
-    elif player_choice == "scissors" and cpu_choice == "paper":
-        screen.blit(win_image, win_image_rect)
-
-    # Lose
-    elif player_choice == "scissors" and cpu_choice == "rock":
-        screen.blit(lose_image, lose_image_rect)
-    elif player_choice == "rock" and cpu_choice == "paper":
-        screen.blit(lose_image, lose_image_rect)
-    elif player_choice == "paper" and cpu_choice == "scissors":
-        screen.blit(lose_image, lose_image_rect)
-    
-
-    # # If anything but rock, paper, or scissors is chosen by user
-    # else:
-    #     print("error")
-    
 pg.quit()
